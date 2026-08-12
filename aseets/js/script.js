@@ -1,3 +1,4 @@
+const MOBILE_TOUCH_STEPS = 3;
 const canvas = document.getElementById("stars");
 const ctx = canvas.getContext("2d");
 
@@ -30,7 +31,7 @@ const FORMATION_PARTS = 12;
 
 // وقتی حدود 93 درصد اسم تشکیل شد
 // اسکرول آزاد می‌شود
-const UNLOCK_PROGRESS = 0.93;
+const UNLOCK_PROGRESS = 0.97;
 
 
 // =====================================================
@@ -660,27 +661,24 @@ window.addEventListener(
     "touchstart",
     (event) => {
 
-        // فقط وقتی هنوز قفل هستیم
-        // preventDefault اجرا شود
-
-        if (!unlocked) {
-
-            event.preventDefault();
-
-            startExperience();
-
+        // اگر اسم کامل شده یا اسکرول آزاد شده
+        // دیگر لمس نباید اسم را خراب کند
+        if (unlocked || progressTarget >= 1) {
+            return;
         }
 
-        // بعد از باز شدن اسکرول
-        // هیچ preventDefault نداریم
-        // تا اسکرول طبیعی موبایل کار کند
+        event.preventDefault();
+
+        // هر لمس موبایل = 3 مرحله
+        for (let i = 0; i < MOBILE_TOUCH_STEPS; i++) {
+            startExperience();
+        }
 
     },
     {
         passive: false
     }
 );
-
 
 // =====================================================
 // رسم ستاره‌های پس‌زمینه
@@ -1180,64 +1178,35 @@ window.addEventListener(
     "resize",
     () => {
 
-        resizeCanvas();
+        // اگر اسم قبلاً کامل شده،
+        // به هیچ عنوان دوباره ساخته نشود
+        if (unlocked) {
+            return;
+        }
 
+        const savedTarget =
+            progressTarget;
+
+        const savedCurrent =
+            progressCurrent;
+
+
+        resizeCanvas();
 
         createBackgroundStars();
 
-
-        /*
-         * اگر اسم هنوز به مرحله نهایی نرسیده
-         * فقط مقصدهای جدید را می‌سازیم.
-         *
-         * ولی اگر اسکرول باز شده باشد
-         * دیگر progress را صفر نمی‌کنیم.
-         */
-
-        if (
-            unlocked
-        ) {
-
-            /*
-             * اسم نباید دوباره از اول شروع شود.
-             *
-             * فقط نقاط جدید ساخته می‌شوند.
-             */
-
-            createFormationStars();
-
-            progressTarget = 1;
-
-            progressCurrent = 1;
-
-        }
-
-        else {
-
-            /*
-             * قبل از باز شدن اسکرول
-             * اگر resize اتفاق افتاد،
-             * از همان مرحله فعلی ادامه می‌دهیم.
-             */
-
-            const savedProgress =
-                progressCurrent;
+        createFormationStars();
 
 
-            createFormationStars();
+        // پیشرفت قبلی حفظ شود
+        progressTarget =
+            savedTarget;
 
-
-            progressTarget =
-                savedProgress;
-
-            progressCurrent =
-                savedProgress;
-
-        }
+        progressCurrent =
+            savedCurrent;
 
     }
 );
-
 
 // =====================================================
 // تشخیص اسکرول
