@@ -10,11 +10,16 @@ const scrollHint = document.getElementById("scrollHint");
 const weddingMusic = document.getElementById("weddingMusic");
 
 
+// =====================================================
 // اسم
+// =====================================================
+
 const text = "SAJAD & ZAHRA";
 
 
+// =====================================================
 // تنظیمات
+// =====================================================
 
 const BACKGROUND_STARS = 500;
 
@@ -23,7 +28,14 @@ const MOUSE_DISTANCE_STEP = 90;
 const FORMATION_PARTS = 12;
 
 
+// درصدی که بعد از آن اسکرول آزاد می‌شود
+// 0.88 = 88 درصد
+const UNLOCK_PROGRESS = 0.88;
+
+
+// =====================================================
 // متغیرها
+// =====================================================
 
 let backgroundStars = [];
 
@@ -39,6 +51,7 @@ let musicStarted = false;
 
 let unlocked = false;
 
+let completionStarted = false;
 
 let lastMouseX = null;
 let lastMouseY = null;
@@ -46,61 +59,109 @@ let lastMouseY = null;
 let mouseDistance = 0;
 
 
-
-// تنظیم اندازه صفحه
+// =====================================================
+// اندازه Canvas
+// =====================================================
 
 function resizeCanvas() {
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
 
-    textCanvas.width = window.innerWidth;
-    textCanvas.height = window.innerHeight;
+    const dpr = Math.min(
+        window.devicePixelRatio || 1,
+        2
+    );
 
+
+    // -------------------------------
+    // Canvas اصلی
+    // -------------------------------
+
+    canvas.width = Math.floor(width * dpr);
+    canvas.height = Math.floor(height * dpr);
+
+    canvas.style.width = width + "px";
+    canvas.style.height = height + "px";
+
+
+    ctx.setTransform(
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
+    );
+
+
+    // -------------------------------
+    // Canvas متن
+    // -------------------------------
+
+    textCanvas.width = Math.floor(width * dpr);
+    textCanvas.height = Math.floor(height * dpr);
+
+    textCanvas.style.width = width + "px";
+    textCanvas.style.height = height + "px";
+
+
+    textCtx.setTransform(
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
+    );
 }
 
 
 resizeCanvas();
 
 
-
-// ===============================
+// =====================================================
 // ساخت ستاره‌های آسمان
-// ===============================
-
+// =====================================================
 
 function createBackgroundStars() {
 
     backgroundStars = [];
 
 
-    for (let i = 0; i < BACKGROUND_STARS; i++) {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
 
+
+    for (
+        let i = 0;
+        i < BACKGROUND_STARS;
+        i++
+    ) {
 
         backgroundStars.push({
 
-            x: Math.random() * canvas.width,
+            x:
+                Math.random() *
+                width,
 
-            y: Math.random() * canvas.height,
-
+            y:
+                Math.random() *
+                height,
 
             size:
                 Math.random() * 1.4 + 0.2,
 
-
             opacity:
                 Math.random() * 0.7 + 0.2,
-
 
             speed:
                 Math.random() * 0.02 + 0.005,
 
-
             phase:
-                Math.random() * Math.PI * 2,
-
-
-            // چند ستاره درخشان
+                Math.random() *
+                Math.PI *
+                2,
 
             bright:
                 Math.random() > 0.96
@@ -108,64 +169,94 @@ function createBackgroundStars() {
         });
 
     }
-
 }
 
 
-
-
-// ===============================
+// =====================================================
 // ساخت نقاط اسم
-// ===============================
-
+// =====================================================
 
 function createTextPoints() {
 
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+
+    // پاک کردن Canvas متن
 
     textCtx.clearRect(
         0,
         0,
-        textCanvas.width,
-        textCanvas.height
+        width,
+        height
     );
 
 
-    let fontSize =
-        Math.min(
-            canvas.width * 0.12,
-            110
-        );
+    // =================================================
+    // اندازه اسم
+    // =================================================
+
+    let fontSize;
 
 
-    if (canvas.width < 600) {
+    if (width <= 380) {
 
         fontSize =
             Math.min(
-                canvas.width * 0.11,
-                65
+                width * 0.115,
+                52
+            );
+
+    }
+
+    else if (width <= 600) {
+
+        fontSize =
+            Math.min(
+                width * 0.12,
+                58
+            );
+
+    }
+
+    else {
+
+        fontSize =
+            Math.min(
+                width * 0.12,
+                110
             );
 
     }
 
 
-
     textCtx.font =
-        `bold ${fontSize}px Arial`;
+        `700 ${fontSize}px Arial`;
 
 
+    // مطمئن می‌شویم اسم از صفحه بیرون نزند
 
     while (
         textCtx.measureText(text).width >
-        canvas.width * 0.85
+        width * 0.86
     ) {
 
         fontSize--;
 
         textCtx.font =
-            `bold ${fontSize}px Arial`;
-
+            `700 ${fontSize}px Arial`;
     }
 
+
+    // =================================================
+    // مرکز واقعی صفحه
+    // =================================================
+
+    const centerX =
+        width / 2;
+
+    const centerY =
+        height / 2;
 
 
     textCtx.textAlign =
@@ -174,73 +265,102 @@ function createTextPoints() {
     textCtx.textBaseline =
         "middle";
 
-
     textCtx.fillStyle =
         "white";
 
 
+    // =================================================
+    // نوشتن اسم دقیقاً وسط
+    // =================================================
 
     textCtx.fillText(
-
         text,
-
-        canvas.width / 2,
-
-        canvas.height / 2
-
+        centerX,
+        centerY
     );
 
+
+    // =================================================
+    // دریافت پیکسل‌ها
+    // =================================================
+
+    const dpr =
+        Math.min(
+            window.devicePixelRatio || 1,
+            2
+        );
 
 
     const data =
         textCtx.getImageData(
-
             0,
             0,
-            canvas.width,
-            canvas.height
-
+            textCanvas.width,
+            textCanvas.height
         );
-
 
 
     let points = [];
 
 
+    // =================================================
+    // فاصله نقاط
+    // =================================================
 
-    const gap = 2.2;
+    let gap;
 
 
+    if (width <= 600) {
+
+        // موبایل:
+        // نقاط کمی متراکم‌تر برای کیفیت بهتر
+
+        gap = 2.7;
+
+    }
+
+    else {
+
+        gap = 2.8;
+
+    }
+
+
+    // =================================================
+    // پیدا کردن نقاط متن
+    // =================================================
 
     for (
         let y = 0;
-        y < canvas.height;
+        y < height;
         y += gap
     ) {
 
-
         for (
             let x = 0;
-            x < canvas.width;
+            x < width;
             x += gap
         ) {
 
+            const pixelX =
+                Math.floor(x * dpr);
+
+            const pixelY =
+                Math.floor(y * dpr);
 
 
             const index =
                 (
-                    Math.floor(y) *
-                    canvas.width +
-                    Math.floor(x)
-
+                    pixelY *
+                    textCanvas.width +
+                    pixelX
                 ) * 4;
 
 
-
             if (
-                data.data[index + 3] > 150
+                data.data[index + 3] >
+                150
             ) {
-
 
                 points.push({
 
@@ -250,234 +370,307 @@ function createTextPoints() {
 
                 });
 
-
             }
-
 
         }
 
     }
 
 
-
     return points;
-
-
 }
 
 
-
-
-
-// ===============================
+// =====================================================
 // ساخت ستاره‌های اسم
-// ===============================
-
+// =====================================================
 
 function createFormationStars() {
-
 
     textPoints =
         createTextPoints();
 
 
-
     formationStars = [];
 
 
+    textPoints.forEach(
+        (point, index) => {
 
-    textPoints.forEach((point, index) => {
-
-
-        const angle =
-            Math.random() *
-            Math.PI *
-            2;
-
-
-        const distance =
-            250 +
-            Math.random() * 300;
+            const angle =
+                Math.random() *
+                Math.PI *
+                2;
 
 
-
-        formationStars.push({
-
-
-            x:
-                point.x +
-                Math.cos(angle) * distance,
+            const distance =
+                250 +
+                Math.random() *
+                300;
 
 
-            y:
-                point.y +
-                Math.sin(angle) * distance,
+            formationStars.push({
+
+                // موقعیت اولیه
+
+                x:
+                    point.x +
+                    Math.cos(angle) *
+                    distance,
+
+                y:
+                    point.y +
+                    Math.sin(angle) *
+                    distance,
 
 
+                // مقصد
 
-            targetX:
-                point.x,
+                targetX:
+                    point.x,
 
-
-            targetY:
-                point.y,
-
-
-
-            size:
-                Math.random() * 1.5 + 0.4,
+                targetY:
+                    point.y,
 
 
+                // اندازه
 
-            opacity:
-                0,
-
-
-
-            active: false,
-
+                size:
+                    Math.random() *
+                    1.35 +
+                    0.45,
 
 
-            progress: 0,
+                // شفافیت
+
+                opacity:
+                    0,
 
 
+                // وضعیت
 
-            delay:
-                index * 8,
-
-
-
-            angle: angle,
+                active:
+                    false,
 
 
-
-            swirl:
-                Math.random() * 25 + 15
-
-
-        });
+                progress:
+                    0,
 
 
+                // کمی اختلاف زمانی
 
-    });
+                delay:
+                    index * 5,
 
 
+                angle:
+                    angle,
 
 
-    // مرتب سازی برای تشکیل از چپ به راست
+                swirl:
+                    Math.random() *
+                    20 +
+                    12
 
-    formationStars.sort(
-        (a, b) =>
-            a.targetX - b.targetX
+            });
+
+        }
     );
 
 
+    // =================================================
+    // مرتب‌سازی
+    // برای تشکیل طبیعی‌تر از چپ به راست
+    // =================================================
 
+    formationStars.sort(
+        (a, b) =>
+            a.targetX -
+            b.targetX
+    );
 }
 
 
+// =====================================================
+// ساخت اولیه
+// =====================================================
 
 createBackgroundStars();
 
 createFormationStars();
 
 
-// ===============================
+// =====================================================
 // شروع تعامل
-// ===============================
-
+// =====================================================
 
 function startExperience() {
 
+    // -----------------------------------------------
+    // موزیک
+    // -----------------------------------------------
 
-    if (!musicStarted) {
+    if (
+        !musicStarted
+    ) {
 
-
-        weddingMusic.play()
+        weddingMusic
+            .play()
             .then(() => {
-                console.log("آهنگ شروع شد");
+
+                musicStarted =
+                    true;
+
+                console.log(
+                    "آهنگ شروع شد"
+                );
+
             })
-            .catch((error) => {
-                console.log("خطای آهنگ:", error);
-            });
+            .catch(
+                (error) => {
+
+                    console.log(
+                        "خطای آهنگ:",
+                        error
+                    );
+
+                }
+            );
 
     }
 
-    touchMessage.style.opacity = "0";
 
+    // -----------------------------------------------
+    // حذف پیام ورود
+    // -----------------------------------------------
+
+    touchMessage.style.opacity =
+        "0";
+
+
+    touchMessage.style.transform =
+        "translate(-50%, -50%) scale(0.95)";
+
+
+    // -----------------------------------------------
+    // افزایش مرحله تشکیل
+    // -----------------------------------------------
 
     progressTarget +=
         1 / FORMATION_PARTS;
 
 
-    if (progressTarget > 1) {
+    if (
+        progressTarget > 1
+    ) {
 
         progressTarget = 1;
 
     }
-
-
 }
-// ===============================
+
+
+// =====================================================
 // حرکت موس
-// ===============================
+// =====================================================
 
-window.addEventListener("mousemove", (event) => {
+window.addEventListener(
+    "mousemove",
+    (event) => {
 
-    // اولین حرکت موس
-    if (lastMouseX === null) {
+        // اگر اولین حرکت است
 
-        lastMouseX = event.clientX;
-        lastMouseY = event.clientY;
+        if (
+            lastMouseX === null
+        ) {
 
-        // همان اولین حرکت هم یک مرحله باشد
-        startExperience();
+            lastMouseX =
+                event.clientX;
 
-        return;
+            lastMouseY =
+                event.clientY;
+
+
+            startExperience();
+
+            return;
+        }
+
+
+        const dx =
+            event.clientX -
+            lastMouseX;
+
+
+        const dy =
+            event.clientY -
+            lastMouseY;
+
+
+        const distance =
+            Math.sqrt(
+                dx * dx +
+                dy * dy
+            );
+
+
+        mouseDistance +=
+            distance;
+
+
+        lastMouseX =
+            event.clientX;
+
+        lastMouseY =
+            event.clientY;
+
+
+        // هر مقدار مشخص حرکت
+        // یک مرحله
+
+        while (
+            mouseDistance >=
+            MOUSE_DISTANCE_STEP
+        ) {
+
+            mouseDistance -=
+                MOUSE_DISTANCE_STEP;
+
+
+            startExperience();
+
+        }
+
     }
+);
 
 
-    const dx =
-        event.clientX - lastMouseX;
-
-    const dy =
-        event.clientY - lastMouseY;
-
-
-    const distance =
-        Math.sqrt(dx * dx + dy * dy);
-
-
-    mouseDistance += distance;
-
-
-    lastMouseX = event.clientX;
-    lastMouseY = event.clientY;
-
-
-    // هر مقدار مشخصی حرکت = یک مرحله
-    while (mouseDistance >= MOUSE_DISTANCE_STEP) {
-
-        mouseDistance -= MOUSE_DISTANCE_STEP;
-
-        startExperience();
-
-    }
-
-});
-
-
-// ===============================
+// =====================================================
 // لمس موبایل
-// ===============================
+// =====================================================
 
 window.addEventListener(
     "touchstart",
     (event) => {
 
-        event.preventDefault();
+        // -------------------------------------------
+        // اگر هنوز قفل هستیم
+        // لمس باید تجربه را شروع کند
+        // -------------------------------------------
 
-        startExperience();
+        if (!unlocked) {
+
+            event.preventDefault();
+
+            startExperience();
+
+        }
+
+        // -------------------------------------------
+        // اگر باز شده
+        // دیگر preventDefault نداریم
+        // تا اسکرول گوشی کاملاً طبیعی باشد
+        // -------------------------------------------
 
     },
     {
@@ -486,112 +679,154 @@ window.addEventListener(
 );
 
 
-
-// ===============================
+// =====================================================
 // رسم ستاره‌های معمولی
-// ===============================
+// =====================================================
 
 function drawBackgroundStars() {
 
-    backgroundStars.forEach((star) => {
+    const width =
+        window.innerWidth;
+
+    const height =
+        window.innerHeight;
 
 
-        // چشمک زدن
-        star.phase += star.speed;
+    backgroundStars.forEach(
+        (star) => {
+
+            // ---------------------------------------
+            // چشمک زدن
+            // ---------------------------------------
+
+            star.phase +=
+                star.speed;
 
 
-        let alpha =
-            star.opacity +
-            Math.sin(star.phase) * 0.18;
+            let alpha =
+                star.opacity +
+                Math.sin(
+                    star.phase
+                ) * 0.18;
 
 
-        if (star.bright) {
+            if (
+                star.bright
+            ) {
 
-            // ستاره‌های درخشان
+                alpha =
+                    0.55 +
+                    Math.sin(
+                        star.phase * 0.7
+                    ) * 0.35;
+
+            }
+
+
+            // محدود کردن شفافیت
+
             alpha =
-                0.55 +
-                Math.sin(star.phase * 0.7) * 0.35;
-
-        }
-
-
-        // ستاره
-        ctx.beginPath();
-
-        ctx.arc(
-            star.x,
-            star.y,
-            star.size,
-            0,
-            Math.PI * 2
-        );
+                Math.max(
+                    0,
+                    Math.min(
+                        1,
+                        alpha
+                    )
+                );
 
 
-        ctx.fillStyle =
-            `rgba(255,255,255,${alpha})`;
-
-
-        ctx.fill();
-
-
-
-        // هاله برای ستاره‌های خاص
-        if (star.bright) {
+            // ---------------------------------------
+            // ستاره
+            // ---------------------------------------
 
             ctx.beginPath();
 
             ctx.arc(
                 star.x,
                 star.y,
-                star.size * 3.5,
+                star.size,
                 0,
                 Math.PI * 2
             );
 
 
-            const glow =
-                ctx.createRadialGradient(
-                    star.x,
-                    star.y,
-                    0,
-                    star.x,
-                    star.y,
-                    star.size * 5
-                );
+            ctx.fillStyle =
+                `rgba(
+                    255,
+                    255,
+                    255,
+                    ${alpha}
+                )`;
 
-
-            glow.addColorStop(
-                0,
-                "rgba(255,255,255,0.35)"
-            );
-
-
-            glow.addColorStop(
-                1,
-                "rgba(255,255,255,0)"
-            );
-
-
-            ctx.fillStyle = glow;
 
             ctx.fill();
 
+
+            // ---------------------------------------
+            // هاله ستاره‌های خاص
+            // ---------------------------------------
+
+            if (
+                star.bright
+            ) {
+
+                ctx.beginPath();
+
+                ctx.arc(
+                    star.x,
+                    star.y,
+                    star.size * 3.5,
+                    0,
+                    Math.PI * 2
+                );
+
+
+                const glow =
+                    ctx.createRadialGradient(
+                        star.x,
+                        star.y,
+                        0,
+                        star.x,
+                        star.y,
+                        star.size * 5
+                    );
+
+
+                glow.addColorStop(
+                    0,
+                    "rgba(255,255,255,0.35)"
+                );
+
+
+                glow.addColorStop(
+                    1,
+                    "rgba(255,255,255,0)"
+                );
+
+
+                ctx.fillStyle =
+                    glow;
+
+
+                ctx.fill();
+
+            }
+
         }
-
-    });
-
+    );
 }
 
 
-
-// ===============================
+// =====================================================
 // حرکت ستاره‌های اسم
-// ===============================
+// =====================================================
 
 function drawFormationStars() {
 
+    // -----------------------------------------------
+    // حرکت نرم progress
+    // -----------------------------------------------
 
-    // نرم شدن میزان پیشرفت
     progressCurrent +=
         (
             progressTarget -
@@ -599,8 +834,9 @@ function drawFormationStars() {
         ) * 0.018;
 
 
-
-    // تعداد ستاره‌هایی که اجازه تشکیل دارند
+    // -----------------------------------------------
+    // تعداد ستاره‌های مجاز
+    // -----------------------------------------------
 
     const targetCount =
         Math.floor(
@@ -609,9 +845,9 @@ function drawFormationStars() {
         );
 
 
-
+    // -----------------------------------------------
     // فعال کردن ستاره‌ها
-    // یکی‌یکی و آرام
+    // -----------------------------------------------
 
     for (
         let i = 0;
@@ -623,274 +859,333 @@ function drawFormationStars() {
             formationStars[i];
 
 
-        if (!star.active) {
+        if (
+            !star.active
+        ) {
 
-            star.active = true;
+            star.active =
+                true;
 
-            star.progress = 0;
+            star.progress =
+                0;
 
-            star.opacity = 0;
+            star.opacity =
+                0;
 
         }
 
     }
 
 
+    // -----------------------------------------------
+    // حرکت ستاره‌ها
+    // -----------------------------------------------
 
-    // حرکت تک تک ستاره‌ها
+    formationStars.forEach(
+        (star) => {
 
-    formationStars.forEach((star) => {
+            if (
+                !star.active
+            ) {
 
+                return;
 
-        if (!star.active) {
-
-            return;
-
-        }
-
-
-
-        // -------------------------------
-        // ظاهر شدن خیلی نرم
-        // -------------------------------
-
-        star.opacity +=
-            (1 - star.opacity) *
-            0.025;
+            }
 
 
+            // ---------------------------------------
+            // ظاهر شدن
+            // ---------------------------------------
 
-        // -------------------------------
-        // فاصله از مقصد
-        // -------------------------------
-
-        const dx =
-            star.targetX -
-            star.x;
-
-
-        const dy =
-            star.targetY -
-            star.y;
+            star.opacity +=
+                (
+                    1 -
+                    star.opacity
+                ) * 0.025;
 
 
+            // ---------------------------------------
+            // فاصله از مقصد
+            // ---------------------------------------
 
-        // -------------------------------
-        // چرخش خیلی ظریف
-        // -------------------------------
-
-        star.angle += 0.012;
+            const dx =
+                star.targetX -
+                star.x;
 
 
-        const distance =
-            Math.sqrt(
-                dx * dx +
-                dy * dy
+            const dy =
+                star.targetY -
+                star.y;
+
+
+            const distance =
+                Math.sqrt(
+                    dx * dx +
+                    dy * dy
+                );
+
+
+            // ---------------------------------------
+            // چرخش خیلی ظریف
+            // ---------------------------------------
+
+            star.angle +=
+                0.012;
+
+
+            const swirlAmount =
+                Math.min(
+                    distance * 0.08,
+                    star.swirl
+                );
+
+
+            const swirlX =
+                Math.cos(
+                    star.angle
+                ) *
+                swirlAmount;
+
+
+            const swirlY =
+                Math.sin(
+                    star.angle
+                ) *
+                swirlAmount;
+
+
+            // ---------------------------------------
+            // حرکت به سمت مقصد
+            // ---------------------------------------
+
+            star.x +=
+                (
+                    dx +
+                    swirlX
+                ) * 0.012;
+
+
+            star.y +=
+                (
+                    dy +
+                    swirlY
+                ) * 0.012;
+
+
+            // ---------------------------------------
+            // نزدیک مقصد
+            // ---------------------------------------
+
+            if (
+                distance < 1.5
+            ) {
+
+                star.x =
+                    star.targetX;
+
+                star.y =
+                    star.targetY;
+
+            }
+
+
+            // ---------------------------------------
+            // رسم ستاره
+            // ---------------------------------------
+
+            ctx.beginPath();
+
+            ctx.arc(
+                star.x,
+                star.y,
+                star.size,
+                0,
+                Math.PI * 2
             );
 
 
-        const swirlAmount =
-            Math.min(
-                distance * 0.08,
-                star.swirl
-            );
+            ctx.fillStyle =
+                `rgba(
+                    255,
+                    255,
+                    255,
+                    ${star.opacity}
+                )`;
 
 
-        const swirlX =
-            Math.cos(star.angle) *
-            swirlAmount;
-
-
-        const swirlY =
-            Math.sin(star.angle) *
-            swirlAmount;
-
-
-
-        // -------------------------------
-        // حرکت آرام به سمت حرف
-        // -------------------------------
-
-        star.x +=
-            (
-                dx +
-                swirlX
-            ) * 0.012;
-
-
-        star.y +=
-            (
-                dy +
-                swirlY
-            ) * 0.012;
-
-
-
-        // -------------------------------
-        // وقتی خیلی نزدیک شد
-        // -------------------------------
-
-        if (distance < 1.5) {
-
-            star.x =
-                star.targetX;
-
-            star.y =
-                star.targetY;
+            ctx.fill();
 
         }
-
-
-
-        // -------------------------------
-        // رسم ستاره
-        // -------------------------------
-
-        ctx.beginPath();
-
-
-        ctx.arc(
-            star.x,
-            star.y,
-            star.size,
-            0,
-            Math.PI * 2
-        );
-
-
-        ctx.fillStyle =
-            `rgba(
-                255,
-                255,
-                255,
-                ${star.opacity}
-            )`;
-
-
-        ctx.fill();
-
-
-    });
-
+    );
 }
 
 
-
-// ===============================
-// بررسی کامل شدن اسم
-// ===============================
-
-let completionStarted = false;
-
+// =====================================================
+// بررسی زمان آزاد شدن اسکرول
+// =====================================================
 
 function checkCompletion() {
 
+    // -----------------------------------------------
+    // وقتی تقریباً 88 درصد اسم تشکیل شد
+    // -----------------------------------------------
 
     if (
-        progressTarget >= 1 &&
-        progressCurrent > 0.995 &&
+        progressCurrent >=
+        UNLOCK_PROGRESS &&
+
         !completionStarted
     ) {
 
-        completionStarted = true;
+        completionStarted =
+            true;
 
 
-        // یک مکث کوتاه تا آخرین ستاره‌ها
-        // کاملاً سر جایشان بنشینند
+        // -------------------------------------------
+        // اسکرول همین‌جا آزاد می‌شود
+        // -------------------------------------------
 
-        setTimeout(() => {
+        unlockScrolling();
 
-            showGoldenLight();
 
-        }, 1000);
+        // -------------------------------------------
+        // نور طلایی
+        // -------------------------------------------
+
+        showGoldenLight();
+
+    }
+}
+
+
+// =====================================================
+// آزاد کردن اسکرول
+// =====================================================
+
+function unlockScrolling() {
+
+    if (
+        unlocked
+    ) {
+
+        return;
 
     }
 
+
+    unlocked =
+        true;
+
+
+    // -----------------------------------------------
+    // باز کردن اسکرول
+    // -----------------------------------------------
+
+    document.body.style.overflowY =
+        "auto";
+
+    document.documentElement.style.overflowY =
+        "auto";
+
+
+    document.body.style.overflowX =
+        "hidden";
+
+    document.documentElement.style.overflowX =
+        "hidden";
+
+
+    // -----------------------------------------------
+    // نمایش فلش
+    // -----------------------------------------------
+
+    setTimeout(
+        () => {
+
+            scrollHint.style.opacity =
+                "1";
+
+
+            scrollHint.style.transform =
+                "translateX(-50%) translateY(0)";
+
+        },
+        500
+    );
 }
 
-// ===============================
+
+// =====================================================
 // نور طلایی
-// ===============================
+// =====================================================
 
 function showGoldenLight() {
 
-
-    goldenLight.classList.add("show");
-
-
-    // بعد از عبور نور
-    // فلش ظاهر شود
-
-    setTimeout(() => {
-
-        scrollHint.style.opacity = "1";
-
-
-        scrollHint.style.transform =
-            "translateX(-50%) translateY(0)";
-
-
-    }, 1700);
-
-
-
-    // کمی بعد اسکرول آزاد شود
-
-    setTimeout(() => {
-
-        unlocked = true;
-
-        document.body.style.overflow = "auto";
-
-        document.documentElement.style.overflow =
-            "auto";
-
-
-    }, 2200);
+    goldenLight.classList.add(
+        "show"
+    );
 
 }
 
 
-// ===============================
+// =====================================================
 // انیمیشن اصلی
-// ===============================
+// =====================================================
 
 function animate() {
 
+    const width =
+        window.innerWidth;
+
+    const height =
+        window.innerHeight;
+
+
+    // -----------------------------------------------
+    // پاک کردن صفحه
+    // -----------------------------------------------
 
     ctx.clearRect(
         0,
         0,
-        canvas.width,
-        canvas.height
+        width,
+        height
     );
 
 
+    // -----------------------------------------------
     // آسمان
+    // -----------------------------------------------
+
     drawBackgroundStars();
 
 
+    // -----------------------------------------------
     // اسم
+    // -----------------------------------------------
+
     drawFormationStars();
 
 
-    // بررسی کامل شدن
+    // -----------------------------------------------
+    // بررسی باز شدن اسکرول
+    // -----------------------------------------------
+
     checkCompletion();
 
 
-    requestAnimationFrame(animate);
-
+    requestAnimationFrame(
+        animate
+    );
 }
-
 
 
 animate();
 
 
-
-// ===============================
+// =====================================================
 // ریسپانسیو
-// ===============================
+// =====================================================
 
 window.addEventListener(
     "resize",
@@ -898,60 +1193,104 @@ window.addEventListener(
 
         resizeCanvas();
 
+
         createBackgroundStars();
 
         createFormationStars();
 
 
-        // اگر اسم هنوز کامل نشده،
-        // دوباره از اول تنظیم شود
+        // اگر هنوز اسکرول باز نشده
+        // اسم از ابتدا دوباره تنظیم شود
 
-        if (!unlocked) {
+        if (
+            !unlocked
+        ) {
 
-            progressTarget = 0;
+            progressTarget =
+                0;
 
-            progressCurrent = 0;
+            progressCurrent =
+                0;
 
-            completionStarted = false;
+            completionStarted =
+                false;
 
         }
 
     }
 );
-window.addEventListener("scroll", () => {
-
-    if(window.scrollY > window.innerHeight * 0.5){
-
-        document.body.classList.add("invitation-active");
-
-    } else {
-
-        document.body.classList.remove("invitation-active");
-
-    }
-
-});
-const reveals = document.querySelectorAll(".reveal");
 
 
-window.addEventListener("scroll", () => {
+// =====================================================
+// تشخیص اسکرول
+// =====================================================
 
-    const trigger =
-        window.innerHeight * 0.8;
+window.addEventListener(
+    "scroll",
+    () => {
 
+        if (
+            window.scrollY >
+            window.innerHeight * 0.5
+        ) {
 
-    reveals.forEach((item)=>{
-
-        const top =
-            item.getBoundingClientRect().top;
-
-
-        if(top < trigger){
-
-            item.classList.add("show");
+            document.body.classList.add(
+                "invitation-active"
+            );
 
         }
 
-    });
+        else {
 
-});
+            document.body.classList.remove(
+                "invitation-active"
+            );
+
+        }
+
+    }
+);
+
+
+// =====================================================
+// انیمیشن‌های Reveal
+// =====================================================
+
+const reveals =
+    document.querySelectorAll(
+        ".reveal"
+    );
+
+
+window.addEventListener(
+    "scroll",
+    () => {
+
+        const trigger =
+            window.innerHeight *
+            0.8;
+
+
+        reveals.forEach(
+            (item) => {
+
+                const top =
+                    item.getBoundingClientRect()
+                        .top;
+
+
+                if (
+                    top < trigger
+                ) {
+
+                    item.classList.add(
+                        "show"
+                    );
+
+                }
+
+            }
+        );
+
+    }
+);
