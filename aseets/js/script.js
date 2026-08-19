@@ -215,26 +215,25 @@ function createTextPoints() {
     let fontSize;
 
 
-    if (width <= 380) {
+  if (width <= 380) {
 
-        fontSize =
-            Math.min(
-                width * 0.115,
-                52
-            );
+    fontSize =
+        Math.min(
+            width * 0.145,
+            68
+        );
 
-    }
+}
 
-    else if (width <= 600) {
+else if (width <= 600) {
 
-        fontSize =
-            Math.min(
-                width * 0.12,
-                58
-            );
+    fontSize =
+        Math.min(
+            width * 0.14,
+            74
+        );
 
-    }
-
+}
     else {
 
         fontSize =
@@ -323,19 +322,17 @@ function createTextPoints() {
     let gap;
 
 
-    if (width <= 600) {
+   if (width <= 600) {
 
-        // موبایل کمی متراکم‌تر
+    gap = 2.1;
 
-        gap = 2.7;
+}
 
-    }
+else {
 
-    else {
+    gap = 2.6;
 
-        gap = 2.8;
-
-    }
+}
 
 
     // =================================================
@@ -1282,3 +1279,163 @@ window.addEventListener(
 
     }
 );
+const scratchCanvas = document.getElementById("scratch");
+const scratchCtx = scratchCanvas.getContext("2d");
+
+const hint = document.querySelector(".hint");
+
+
+function setCanvasSize(){
+
+    scratchCanvas.width = scratchCanvas.offsetWidth;
+    scratchCanvas.height = scratchCanvas.offsetHeight;
+
+
+    scratchCtx.globalCompositeOperation = "source-over";
+
+    // مه سنگین
+    scratchCtx.fillStyle = "rgba(245,235,220,0.97)";
+
+    scratchCtx.fillRect(
+        0,
+        0,
+        scratchCanvas.width,
+        scratchCanvas.height
+    );
+}
+
+
+setCanvasSize();
+
+
+window.addEventListener("resize",setCanvasSize);
+
+
+
+let drawing = false;
+let erasedAmount = 0;
+
+
+
+function erase(x,y){
+
+    scratchCtx.globalCompositeOperation = "destination-out";
+
+
+    scratchCtx.beginPath();
+
+    scratchCtx.arc(
+        x,
+        y,
+        25,
+        0,
+        Math.PI * 2
+    );
+
+    scratchCtx.fill();
+
+
+    erasedAmount++;
+
+
+    // بعد از کمی پاک شدن، متن و دست محو شوند
+    if(erasedAmount > 15){
+
+        hint.classList.add("hide");
+       document.querySelector(".date-reveal")
+.classList.add("show-content");
+    }
+
+}
+
+
+
+// لپ تاپ
+scratchCanvas.addEventListener("mousedown",()=>{
+
+    drawing = true;
+
+});
+
+
+window.addEventListener("mouseup",()=>{
+
+    drawing = false;
+
+});
+
+
+scratchCanvas.addEventListener("mousemove",(e)=>{
+
+    if(!drawing) return;
+
+
+    const rect = scratchCanvas.getBoundingClientRect();
+
+
+    erase(
+        e.clientX - rect.left,
+        e.clientY - rect.top
+    );
+
+});
+
+
+
+// موبایل
+scratchCanvas.addEventListener("touchmove",(e)=>{
+
+    e.preventDefault();
+
+
+    const rect = scratchCanvas.getBoundingClientRect();
+
+
+    erase(
+        e.touches[0].clientX - rect.left,
+        e.touches[0].clientY - rect.top
+    );
+
+
+},{passive:false});
+
+const weddingDate = new Date("2026-09-16 18:30:00").getTime();
+
+
+setInterval(function(){
+
+    const now = new Date().getTime();
+
+    const distance = weddingDate - now;
+
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+
+    const hours = Math.floor(
+        (distance % (1000 * 60 * 60 * 24))
+        /(1000 * 60 * 60)
+    );
+
+
+    const minutes = Math.floor(
+        (distance % (1000 * 60 * 60))
+        /(1000 * 60)
+    );
+
+
+    const seconds = Math.floor(
+        (distance % (1000 * 60))
+        /1000
+    );
+
+
+    document.getElementById("days").innerHTML = days;
+
+    document.getElementById("hours").innerHTML = hours;
+
+    document.getElementById("minutes").innerHTML = minutes;
+
+    document.getElementById("seconds").innerHTML = seconds;
+
+
+},1000);
