@@ -16,6 +16,7 @@
 
 html,
 body {
+
     width: 100%;
     min-height: 100%;
 
@@ -25,8 +26,8 @@ body {
     overflow-x: hidden;
     overflow-y: hidden;
 
-    background: #000;
 }
+
 
 
 /* ===============================
@@ -34,10 +35,12 @@ body {
 ================================ */
 
 .story {
+
     position: relative;
 
     width: 100%;
     height: 100vh;
+
     min-height: 100vh;
 
     overflow: hidden;
@@ -45,10 +48,13 @@ body {
     background: #000;
 
     z-index: 1;
+
 }
 
 
+
 .story::after {
+
     content: "";
 
     position: absolute;
@@ -59,28 +65,36 @@ body {
     width: 100%;
     height: 220px;
 
+
     background:
-        radial-gradient(
-            ellipse at center,
-            rgba(0, 0, 0, 0.95) 0%,
-            rgba(0, 0, 0, 0.75) 35%,
-            rgba(0, 0, 0, 0.35) 60%,
-            transparent 85%
-        );
+        radial-gradient(ellipse at center,
+
+            rgba(0, 0, 0, .95) 0%,
+
+            rgba(0, 0, 0, .75) 35%,
+
+            rgba(0, 0, 0, .35) 60%,
+
+            transparent 85%);
+
 
     filter: blur(20px);
 
     z-index: 3;
 
     pointer-events: none;
+
 }
 
 
+
 /* ===============================
-   آسمان و Canvas
+   Canvas
 ================================ */
 
+
 #stars {
+
     position: absolute;
 
     inset: 0;
@@ -92,550 +106,832 @@ body {
 
     pointer-events: none;
 
-    display: block;
 }
 
 
-/* Canvas مخفی برای ساخت نقاط اسم */
 
 #textCanvas {
+
     display: none;
+
 }
+
 
 
 /* ===============================
    پیام ورود
 ================================ */
 
+
 #touchMessage {
+
     position: fixed;
 
     left: 50%;
     top: 50%;
 
+
     transform: translate(-50%, -50%);
+
 
     z-index: 10;
 
-    color: rgba(255, 255, 255, 0.9);
 
-    font-family: "Vazirmatn", sans-serif;
+    color: rgba(255, 255, 255, .9);
+
 
     font-size: 18px;
 
+
     letter-spacing: 1px;
+
 
     white-space: nowrap;
 
+
     pointer-events: none;
+
 
     text-align: center;
 
+
     transition:
-        opacity 0.8s ease,
-        transform 0.8s ease;
+
+        opacity .8s ease,
+
+        transform .8s ease;
+
 }
 
 
+
 /* ===============================
-   فلش ادامه
+   فلش
 ================================ */
 
+
 #scrollHint {
+
     position: absolute;
+
 
     left: 50%;
 
-    /*
-       فلش را نزدیک نوار طلایی قرار می‌دهیم
-       تا روی موبایل هم واضح دیده شود.
-    */
     top: calc(50% + 105px);
+
 
     transform: translateX(-50%);
 
+
     z-index: 20;
+
 
     opacity: 0;
 
+
     pointer-events: none;
 
+
     width: 50px;
+
     height: 50px;
 
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
-    transition:
-        opacity 0.8s ease,
-        transform 0.8s ease;
+
 }
 
 
-/* ===============================
-   خود فلش
-================================ */
 
 #scrollHint span {
-    display: block;
+
 
     font-size: 30px;
 
-    font-family: Arial, sans-serif;
 
-    font-weight: 200;
+    color: rgba(255, 215, 130, .95);
 
-    color: rgba(255, 215, 130, 0.95);
 
     text-shadow:
-        0 0 8px rgba(255, 190, 80, 0.8),
-        0 0 20px rgba(255, 180, 60, 0.5),
-        0 0 35px rgba(255, 170, 50, 0.25);
+
+        0 0 8px rgba(255, 190, 80, .8),
+
+        0 0 20px rgba(255, 180, 60, .5);
+
 
     animation:
+
         scrollArrow 1.8s ease-in-out infinite;
+
+
 }
 
 
-/* ===============================
-   حرکت نرم فلش
-================================ */
 
 @keyframes scrollArrow {
 
+
     0% {
+
         transform: translateY(0);
-        opacity: 0.5;
+
+        opacity: .5;
+
     }
+
 
     50% {
+
         transform: translateY(8px);
+
         opacity: 1;
+
     }
+
 
     100% {
-        transform: translateY(0);
-        opacity: 0.5;
-    }
-}
 
+        transform: translateY(0);
+
+        opacity: .5;
+
+    }
+
+}
 
 /* ===============================
    نور طلایی زیر اسم
 ================================ */
 
 #goldenLight {
+
     position: absolute;
 
     left: 50%;
+
     top: calc(50% + 75px);
 
+
     width: 0;
+
     height: 2px;
+
 
     transform: translateX(-50%);
 
+
     z-index: 15;
 
+
     background:
-        linear-gradient(
-            90deg,
+
+        linear-gradient(90deg,
+
             transparent,
-            rgba(255, 210, 120, 0.9),
+
+            rgba(255, 210, 120, .9),
+
             rgba(255, 235, 180, 1),
-            rgba(255, 210, 120, 0.9),
-            transparent
-        );
+
+            rgba(255, 210, 120, .9),
+
+            transparent);
+
 
     box-shadow:
-        0 0 8px rgba(255, 200, 100, 0.9),
-        0 0 22px rgba(255, 180, 70, 0.65),
-        0 0 45px rgba(255, 170, 50, 0.35);
+
+        0 0 8px rgba(255, 200, 100, .9),
+
+        0 0 22px rgba(255, 180, 70, .65);
+
 
     opacity: 0;
 
-    pointer-events: none;
+    transition: .8s ease;
 
-    transition:
-        width 1.4s ease,
-        opacity 1s ease;
 }
 
 
-/* وقتی نور طلایی ظاهر می‌شود */
 
 #goldenLight.show {
+
     width: min(420px, 70vw);
 
     opacity: 1;
 
-    animation:
-        goldenSweep 2.2s ease-in-out forwards;
 }
 
 
-/* ===============================
-   حرکت نور طلایی
-================================ */
-
-@keyframes goldenSweep {
-
-    0% {
-        transform:
-            translateX(-50%)
-            scaleX(0.2);
-
-        opacity: 0;
-    }
-
-    25% {
-        opacity: 1;
-    }
-
-    70% {
-        transform:
-            translateX(-50%)
-            scaleX(1);
-
-        opacity: 1;
-    }
-
-    100% {
-        transform:
-            translateX(-50%)
-            scaleX(0.4);
-
-        opacity: 0.25;
-    }
-}
-
 
 /* ===============================
-   صفحه دوم | دعوت‌نامه
+   صفحه دعوت نامه
 ================================ */
+
 
 .invitation {
+
     position: relative;
 
     width: 100%;
 
     min-height: 100vh;
 
+
     padding-top: 100px;
 
+
+    color: #2e231a;
+
+
+    z-index: 5;
+
+
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
     background-image:
-        url("../img/ChatGPT Image Aug 11, 2026, 04_20_45 PM.png");
+        url("../img/photo_2026-08-19_15-47-32.jpg");
 
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    background-attachment: fixed;
 
-    color: #332b25;
-
-    z-index: 5;
-
-    overflow: hidden;
 }
+
+.p-names-text {
+    font-size: 30px;
+
+    font-weight: 400;
+}
+
+/* svg {
+
+    width: min(90%, 760px);
+
+    margin: 0;
+
+    padding: 0;
+
+    opacity: .7;
+
+    filter: drop-shadow(0 0 15px rgba(240, 232, 214, 0.5));
+
+    
+}
+            
+			g#bigWave {
+				transform: translatex(-1440px);
+				opacity: .5;
+				height:96px;
+				
+				fill: #D6B36A;
+				path#bluePath0 {
+					transform: translatex(-1440px);
+				}
+				path#bluePath1 {
+					transform: translatex(0px);
+				}
+				path#bluePath2 {
+					transform: translatex(1440px);
+				}
+				
+        }
+			
+
+		svg#border0 {
+			transform: translatey(2px);
+			
+			g {
+				animation: waves 8s linear infinite;
+			}
+		}
+		
+		svg#border1 {
+			transform: scaley(-1) translatey(2px);
+			
+			g{
+				animation: waves 4s linear infinite 1.5s;
+			}
+		}
+		@keyframes waves {
+	to{transform:translatex(1440px)}
+} */
 
 
 /* ===============================
-   اتصال نرم آسمان به کرم
+   هاله انتقال
 ================================ */
 
-.cloud-transition {
-    position: relative;
 
-    width: 100%;
-    height: 120px;
+.transition-glow {
 
-    margin-bottom: -1px;
+    position: absolute;
+
+    top: -50px;
+
+    left: 50%;
+
+
+    transform: translateX(-50%);
+
+
+    width: 180%;
+
+    height: 160px;
+
 
     background:
-        radial-gradient(
-            ellipse at center bottom,
-            #f7f3ec 0%,
-            rgba(247, 243, 236, 0.95) 35%,
-            rgba(247, 243, 236, 0.55) 55%,
-            rgba(247, 243, 236, 0) 85%
-        );
 
-    filter: blur(8px);
+        radial-gradient(ellipse at center top,
 
-    z-index: 4;
+            #000 0%,
 
-    pointer-events: none;
+            rgba(0, 0, 0, .75) 45%,
+
+            transparent 100%);
+
+
+    filter: blur(25px);
+
+    z-index: 3;
+
 }
 
 
+
+
+
 /* ===============================
-   محتوای دعوت نامه
+   باکس‌های دعوت
 ================================ */
 
-.invitation-content {
+
+.wave-box {
+
     position: relative;
 
-    z-index: 2;
+    width: min(90%, 760px);
 
-    width: 100%;
+    min-height: 390px;
 
-    max-width: 700px;
+    margin: 50px auto;
 
-    margin: 0 auto;
+    background: rgba(255, 249, 240, 0.18);
 
-    padding: 0 20px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border: 1px solid rgba(255, 255, 255, 0.35);
+
+    border-radius: 30px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-direction: column;
 
     text-align: center;
 
-    line-height: 2.4;
+    overflow: hidden;
 
-    font-size: 20px;
+
 }
 
 
+@keyframes waveRotate {
+
+
+    from {
+
+        transform: rotate(0deg);
+
+    }
+
+
+    to {
+
+        transform: rotate(360deg);
+
+    }
+
+}
+
+
+
 /* ===============================
-   تیتر
+   متن داخل باکس
 ================================ */
 
+
+.box-content {
+
+
+    position: relative;
+
+
+    z-index: 5;
+
+
+    padding: 45px 35px;
+
+
+}
+
+
+
+.box-content p {
+
+
+    color: #2e231a;
+
+
+    line-height: 2.2;
+
+
+}
+
+
+
 .invitation-title {
+
+
     font-size: 28px;
+
 
     font-weight: 500;
 
+
     margin-bottom: 35px;
+
+
 }
 
 
-/* ===============================
-   فاصله بین پاراگراف‌ها
-================================ */
+
+
 
 .invitation-content p {
+
+
     margin-bottom: 30px;
+
+
 }
+
+.invitation-content {
+    margin: 0px auto;
+}
+
+
+
 
 
 /* ===============================
    اسم‌ها
 ================================ */
 
+
 .names {
-    margin-top: 50px;
 
-    font-size: 30px;
 
-    font-weight: 500;
+    min-height: 220px;
 
-    letter-spacing: 2px;
+
 }
 
-
-/* ===============================
-   Transition Glow
-================================ */
-
-.transition-glow {
-    position: absolute;
-
-    top: -50px;
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    width: 180%;
-    height: 160px;
-
-    background:
-        radial-gradient(
-            ellipse at center top,
-            rgba(0, 0, 0, 1) 0%,
-            rgba(0, 0, 0, 0.85) 45%,
-            rgba(0, 0, 0, 0.45) 60%,
-            transparent 100%
-        );
-
-    filter: blur(25px);
-
-    z-index: 3;
-
-    pointer-events: none;
-}
-
-
-.transition-glow::before {
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-    left: 0;
-
+.names-text {
+    position: relative;
+    z-index: 5;
+    font-family: Arial, sans-serif;
+    font-size: clamp(24px, 5vw, 42px);
+    letter-spacing: 5px;
+    color: #2e231a;
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    height: 100%;
-
-    background:
-        linear-gradient(
-            to bottom,
-            #000 0%,
-            transparent 70%
-        );
+    align-items: center;
+    justify-content: center;
 }
 
+.timer-text {
+    display: flex;
+    gap: 15px;
+    width: 90%;
+    margin: 0 auto;
+    padding: 10px 0px;
+    align-items: center;
+    justify-content: center;
 
+}
+
+.timer-text-one {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #5A4638;
+    width: 70px;
+    height: 70px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: 20px;
+    text-align: center;
+}
+
+.ti-te-one {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.45);
+    border: 1px solid rgba(180, 140, 90, 0.25);
+
+}
+.time-text-1{
+    font-size:20PX;
+    letter-spacing: 4PX;
+    position: relative;
+    width:220px;
+    height:220px;
+    max-width: 80vw;
+    max-height:80vw;
+    margin: 30px auto;
+    background: rgba(255, 249, 240, 0.12);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius:50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    overflow: hidden;
+    box-shadow:0 20px 50px rgba(0, 0, 0, 0.15);
+}
 /* ===============================
    Reveal
 ================================ */
 
+
 .reveal {
+
+
     opacity: 0;
+
 
     transform: translateY(25px);
 
+
     transition:
+
         opacity 1.5s ease,
+
         transform 1.5s ease;
+
+
 }
+
 
 
 .reveal.show {
+
+
     opacity: 1;
 
+
     transform: translateY(0);
+
+
 }
 
 
-/* ===============================
-   Delay ها
-================================ */
 
 .delay-1 {
-    transition-delay: 0.9s;
+
+    transition-delay: .9s;
+
 }
 
 
 .delay-2 {
-    transition-delay: 1.8s;
-}
 
+    transition-delay: 1.5s;
+
+}
+.delay-5 {
+
+    transition-delay: 1.5s;
+
+}
 
 .delay-3 {
-    transition-delay: 2s;
+
+    transition-delay:1.5s;
+
 }
 
 
+.delay-4 {
+
+    transition-delay: 2.3s;
+
+}
+
 /* ===============================
-   ریسپانسیو موبایل
+   موبایل
 ================================ */
 
-@media (max-width: 600px) {
 
-    .story {
-        width: 100%;
-        height: 100vh;
-        min-height: 100vh;
-
-        overflow: hidden;
-    }
-
-
-    #touchMessage {
-        font-size: 16px;
-
-        letter-spacing: 0.5px;
-
-        max-width: 90vw;
-
-        text-align: center;
-    }
-
-
-    /*
-       فلش در موبایل دقیقاً پایین نوار طلایی
-       و نزدیک مرکز صفحه قرار می‌گیرد.
-    */
-    #scrollHint {
-        top: calc(50% + 105px);
-
-        width: 55px;
-        height: 55px;
-    }
-
-
-    #scrollHint span {
-        font-size: 28px;
-    }
-
-
-    #goldenLight {
-        top: calc(50% + 65px);
-
-        width: min(330px, 72vw);
-    }
+@media(max-width:600px) {
 
 
     .invitation {
-        min-height: 100vh;
+
 
         padding:
+
             110px 18px 80px;
+
     }
 
 
-    .invitation-content {
-        font-size: 17px;
 
-        line-height: 2.3;
+    .wave-box {
 
-        padding: 0 8px;
+
+        width: 90%;
+
+
+        min-height: 340px;
+
+
+        margin: 35px auto;
+
+
     }
+
+
+
+    .box-content {
+
+
+        padding: 35px 25px;
+
+
+    }
+
 
 
     .invitation-title {
-        font-size: 23px;
 
-        margin-bottom: 28px;
+        font-weight: bold;
+        font-size: 25px;
+
+
     }
 
 
-    .invitation-content p {
-        margin-bottom: 25px;
+
+    .box-content p {
+
+
+        font-size: 16px;
+
+
+        line-height: 2.1;
+
+
     }
+
 
 
     .names {
-        font-size: 25px;
 
-        margin-top: 40px;
 
-        letter-spacing: 1.5px;
+        min-height: 190px;
+
     }
+
+
+
+    .names-text {
+
+        font-size: 23px;
+
+        letter-spacing: 3px;
+
+
+    }
+
+
 }
 
 
-/* ===============================
-   موبایل خیلی کوچک
-================================ */
 
-@media (max-width: 380px) {
+
+
+
+
+/* موبایل خیلی کوچک */
+
+
+@media(max-width:380px) {
+
 
     #touchMessage {
+
         font-size: 15px;
+
     }
 
-
-    #scrollHint {
-        top: calc(50% + 100px);
-    }
-
-
-    #scrollHint span {
-        font-size: 26px;
-    }
 
 
     #goldenLight {
+
+
         top: calc(50% + 62px);
 
-        width: 70vw;
     }
+
+
+}
+.date-reveal{
+    position: relative;
+    overflow: hidden;
+}
+
+
+#scratch{
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    z-index: 10;
+
+    cursor: grab;
+}
+
+
+.hint{
+    position: absolute;
+    inset: 0;
+
+    z-index: 11;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    pointer-events:none;
+
+    color:rgba(90,70,55,0.7);
+}
+.hint.hide{
+    opacity:0;
+    transition:0.5s ease;
+}
+
+.hand{
+    animation: handMove 1.5s infinite;
+}
+
+@keyframes handMove{
+    0%,100%{
+        transform:translateX(-8px);
+    }
+
+    50%{
+        transform:translateX(8px);
+    }
+}
+.timer-text
+{
+    opacity:0;
+    transform:translateY(15px);
+    transition:0.8s ease;
+}
+
+
+.date-reveal.show-content .timer-text,
+.date-reveal.show-content .time-text-1{
+    opacity:1;
+    transform:translateY(0);
 }
