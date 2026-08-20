@@ -6,149 +6,130 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Our Story</title>
 
     <!-- CSS -->
-    <link
-        rel="stylesheet"
-        href="aseets/css/style.css"
-    >
-   <!-- icon -->
-      <link
-        rel="stylesheet"
-        href="aseets/icon/FontAwesome.Pro.6.5.2/css/all.css"
-    >
+    <link rel="stylesheet" href="aseets/css/style.css">
+    <!-- icon -->
+    <link rel="stylesheet" href="aseets/icon/FontAwesome.Pro.6.5.2/css/all.css">
     <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
 
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap"
-        rel="stylesheet"
-    >
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet">
 
 </head>
 
 
 <body>
 
-<main>
+    <main>
 
 
-<!-- =================================
+        <!-- =================================
      صفحه اول | آسمان ستاره‌ای
 ================================== -->
 
-<section class="story">
+        <section class="story">
 
-    <canvas id="stars"></canvas>
+            <canvas id="stars"></canvas>
 
-    <!-- Canvas مخفی برای ساخت اسم -->
-    <canvas id="textCanvas"></canvas>
-
-
-    <!-- پیام ورود -->
-    <div id="touchMessage">
-        برای ورود لمس کنید
-    </div>
+            <!-- Canvas مخفی برای ساخت اسم -->
+            <canvas id="textCanvas"></canvas>
 
 
-    <!-- نور طلایی -->
-    <div id="goldenLight"></div>
+            <!-- پیام ورود -->
+            <div id="touchMessage">
+                برای ورود لمس کنید
+            </div>
 
 
-    <!-- علامت ادامه -->
-    <div id="scrollHint">
-        <span>↓</span>
-    </div>
-
-</section>
+            <!-- نور طلایی -->
+            <div id="goldenLight"></div>
 
 
+            <!-- علامت ادامه -->
+            <div id="scrollHint">
+                <span>↓</span>
+            </div>
 
-<!-- =================================
+        </section>
+
+
+
+        <!-- =================================
      موسیقی
 ================================== -->
 
-<audio id="weddingMusic" loop>
+        <audio id="weddingMusic" loop>
 
-    <source
-        src="aseets/music/Sina Sarlak - Jane Mani.mp3"
-        type="audio/mpeg"
-    >
+            <source src="aseets/music/Sina Sarlak - Jane Mani.mp3" type="audio/mpeg">
 
-</audio>
+        </audio>
 
 
 
-<!-- =================================
+        <!-- =================================
      صفحه دوم | دعوت‌نامه
 ================================== -->
 
-<section class="invitation">
+        <section class="invitation">
 
-    <!-- هاله انتقال -->
-    <div class="transition-glow"></div>
+            <!-- هاله انتقال -->
+            <div class="transition-glow"></div>
 
 
-    <!-- =================================
+            <!-- =================================
          باکس اول
     ================================== -->
-<!-- <svg id="border0" viewBox="0 0 1440 96" xmlns="http://www.w3.org/2000/svg">
+            <!-- <svg id="border0" viewBox="0 0 1440 96" xmlns="http://www.w3.org/2000/svg">
 		<g id="bigWave">
 			<path id="bluePath0" d="M719.5 38C439.435 15.3187 412 -37 0 38V96.5H1440V38C1053.5 96.5 1003.5 61 719.5 38Z" />
 			<path id="bluePath1" d="M719.5 38C439.435 15.3187 412 -37 0 38V96.5H1440V38C1053.5 96.5 1003.5 61 719.5 38Z" />
 			<path id="bluePath2" d="M719.5 38C439.435 15.3187 412 -37 0 38V96.5H1440V38C1053.5 96.5 1003.5 61 719.5 38Z" />
 		</g>
 	</svg> -->
-    <div class="wave-box invitation-content">
-
-        
-
-        <!-- محتوای باکس -->
-
-        <div class="box-content">
-	
-            <p class="invitation-title reveal">
-                در میان هزاران ستاره
-            </p>
+            <div class="wave-box invitation-content">
 
 
-            <p class="reveal delay-1">
-                بعضی آدم‌ها
-                <br>
-                برای هم پیدا می‌شوند
-            </p>
+
+                <!-- محتوای باکس -->
+
+                <div class="box-content">
+
+                    <p class="invitation-title reveal">
+                        در میان هزاران ستاره
+                    </p>
 
 
-            <p class="reveal delay-2">
+                    <p class="reveal delay-1">
+                        بعضی آدم‌ها
+                        <br>
+                        برای هم پیدا می‌شوند
+                    </p>
 
-                و حالا ما
 
-                <br><br>
+                    <p class="reveal delay-2">
 
-                در روزی که برایمان آغاز یک عمر است
+                        و حالا ما
 
-                <br>
+                        <br><br>
 
-                چشم‌انتظار حضور شما هستیم.
+                        در روزی که برایمان آغاز یک عمر است
 
-            </p>
+                        <br>
 
-        </div>
+                        چشم‌انتظار حضور شما هستیم.
 
-    </div>
-    <!-- <svg id="border1" viewBox="0 0 1440 96" xmlns="http://www.w3.org/2000/svg">
+                    </p>
+
+                </div>
+
+            </div>
+            <!-- <svg id="border1" viewBox="0 0 1440 96" xmlns="http://www.w3.org/2000/svg">
 		<g id="bigWave">
 			<path id="bluePath0" d="M719.5 38C439.435 15.3187 412 -37 0 38V96.5H1440V38C1053.5 96.5 1003.5 61 719.5 38Z" />
 			<path id="bluePath1" d="M719.5 38C439.435 15.3187 412 -37 0 38V96.5H1440V38C1053.5 96.5 1003.5 61 719.5 38Z" />
@@ -158,63 +139,63 @@
   	 -->
 
 
-    <!-- =================================
+            <!-- =================================
          باکس دوم | اسم‌ها
     ================================== -->
- <div class="reveal delay-5">
+            <div class="reveal delay-5">
                 <p class="p-names-text">
-                  تا شروع قصه ما....  
+                    تا شروع قصه ما....
                 </p>
             </div>
-    <div class="wave-box names reveal delay-3 date-reveal">
-        
-        <section class="names-text">
-            <div class="timer-text">
-            <div class="timer-text-one ">
-            <span id="hours">00</span>
-            <span>ساعت</span>
-        </div>
-            <div class="timer-text-one">
-            <span id="minutes">00</span>
-            <span>دقیقه</span>
-        </div>
-            <div class="timer-text-one">
-            <span id="seconds">00</span>
-            <span>ثانیه</span> 
-        </div>
-            <div class="timer-text-one ti-te-one">
-            <span id="days">00</span>
-            <span>روز</span>
-        </div>
-       </div>
+            <div class="wave-box names reveal delay-3 date-reveal">
+
+                <section class="names-text">
+                    <div class="timer-text">
+                        <div class="timer-text-one">
+                            <span id="seconds">00</span>
+                            <span>ثانیه</span>
+                        </div>
+                        <div class="timer-text-one">
+                            <span id="minutes">00</span>
+                            <span>دقیقه</span>
+                        </div>
+                        <div class="timer-text-one ">
+                            <span id="hours">00</span>
+                            <span>ساعت</span>
+                        </div>
+                        <div class="timer-text-one ti-te-one">
+                            <span id="days">00</span>
+                            <span>روز</span>
+                        </div>
+                    </div>
+                </section>
+                <div class="hint">
+                    <span>لحظه های باقی مانده را ببینید</span>
+                    <div class="hand"><i class="fa-regular fa-hand-point-up"></i></div>
+                </div>
+                <canvas id="scratch"></canvas>
+            </div>
+
+            <div class="time-text-1 reveal delay-4">25.6.1405
+                <i class="fa-regular fa-heart"></i>
+                <p>تاریخ مراسم</p>
+            </div>
+
+            </div>
+
+
         </section>
-        <div class="hint">
-            <span>لحظه های باقی مانده را ببینید</span>
-            <div class="hand"><i class="fa-regular fa-hand-point-up"></i></div>
-        </div>
-        <canvas id="scratch"></canvas>
-        </div>
-
-        <div class="time-text-1 reveal delay-4">25.6.1405
-           <i class="fa-regular fa-heart"></i>
-           <p>تاریخ مراسم</p>
-        </div>
-
-    </div>
-    
-
-</section>
 
 
-</main>
+    </main>
 
 
 
-<!-- =================================
+    <!-- =================================
      JavaScript
 ================================== -->
 
-<script src="aseets/js/script.js"></script>
+    <script src="aseets/js/script.js"></script>
 
 </body>
 
