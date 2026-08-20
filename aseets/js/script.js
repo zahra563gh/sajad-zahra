@@ -941,9 +941,9 @@ function drawFormationStars() {
             // -----------------------------------------
 
             const formationSpeed =
-                window.innerWidth <= 600
-                    ? 0.018
-                    : 0.012;
+    window.innerWidth <= 600
+        ? 0.045
+        : 0.012;
 
 
             // -----------------------------------------
@@ -1284,17 +1284,34 @@ const scratchCtx = scratchCanvas.getContext("2d");
 
 const hint = document.querySelector(".hint");
 
+let drawing = false;
+let erasedAmount = 0;
+let scratchCompleted = false;
+let hintHidden = false;
 
 function setCanvasSize(){
 
     scratchCanvas.width = scratchCanvas.offsetWidth;
     scratchCanvas.height = scratchCanvas.offsetHeight;
 
+    // اگر مه قبلاً پاک شده، دوباره ساخته نشه
+    if (scratchCompleted) {
 
-    scratchCtx.globalCompositeOperation = "source-over";
+        scratchCtx.clearRect(
+            0,
+            0,
+            scratchCanvas.width,
+            scratchCanvas.height
+        );
 
-    // مه سنگین
-    scratchCtx.fillStyle = "rgba(245,235,220,0.97)";
+        return;
+    }
+
+    scratchCtx.globalCompositeOperation =
+        "source-over";
+
+    scratchCtx.fillStyle =
+        "rgba(245,235,220,0.97)";
 
     scratchCtx.fillRect(
         0,
@@ -1308,19 +1325,21 @@ function setCanvasSize(){
 setCanvasSize();
 
 
-window.addEventListener("resize",setCanvasSize);
+window.addEventListener(
+    "resize",
+    setCanvasSize
+);
 
 
 
-let drawing = false;
-let erasedAmount = 0;
 
 
+function erase(x, y) {
 
-function erase(x,y){
+    if (scratchCompleted) return;
 
-    scratchCtx.globalCompositeOperation = "destination-out";
-
+    scratchCtx.globalCompositeOperation =
+        "destination-out";
 
     scratchCtx.beginPath();
 
@@ -1334,18 +1353,22 @@ function erase(x,y){
 
     scratchCtx.fill();
 
-
     erasedAmount++;
 
+    // بعد از کمی کشیدن، راهنما محو شود
+    if (erasedAmount > 15 && !hintHidden) {
 
-    // بعد از کمی پاک شدن، متن و دست محو شوند
-    if(erasedAmount > 15){
+        hintHidden = true;
 
-        hint.classList.add("hide");
-       document.querySelector(".date-reveal")
-.classList.add("show-content");
+        setTimeout(() => {
+
+            hint.classList.add("hide");
+
+            document.querySelector(".date-reveal")
+                .classList.add("show-content");
+
+        }, 250);
     }
-
 }
 
 
@@ -1383,6 +1406,14 @@ scratchCanvas.addEventListener("mousemove",(e)=>{
 
 
 // موبایل
+scratchCanvas.addEventListener("touchstart", (e) => {
+
+    if (scratchCompleted) return;
+
+    e.preventDefault();
+
+}, { passive: false });
+
 scratchCanvas.addEventListener("touchmove",(e)=>{
 
     e.preventDefault();
@@ -1399,7 +1430,14 @@ scratchCanvas.addEventListener("touchmove",(e)=>{
 
 },{passive:false});
 
-const weddingDate = new Date("2026-09-16 18:30:00").getTime();
+const weddingDate = new Date(
+    2026,
+    8,
+    16,
+    16,
+    30,
+    0
+).getTime();
 
 
 setInterval(function(){
