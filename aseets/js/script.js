@@ -694,9 +694,21 @@ window.addEventListener(
         event.preventDefault();
 
         // هر لمس موبایل = 3 مرحله
-        for (let i = 0; i < MOBILE_TOUCH_STEPS; i++) {
-            startExperience();
-        }
+       if (!musicStarted) {
+
+    weddingMusic.play()
+        .then(() => {
+            musicStarted = true;
+        })
+        .catch((error) => {
+            console.log("موزیک اجرا نشد:", error);
+        });
+
+}
+
+for (let i = 0; i < MOBILE_TOUCH_STEPS; i++) {
+    startExperience();
+}
 
     },
     {
