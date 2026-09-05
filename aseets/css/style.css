@@ -129,43 +129,61 @@ section{
 
 
 #touchMessage {
-
     position: fixed;
-
     left: 50%;
     top: 50%;
-
-
     transform: translate(-50%, -50%);
-
-
     z-index: 10;
 
-
     color: rgba(255, 255, 255, .9);
-
-
     font-size: 18px;
-
-
     letter-spacing: 1px;
-
-
     white-space: nowrap;
 
-
     pointer-events: none;
-
-
     text-align: center;
 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
 
     transition:
-
         opacity .8s ease,
-
         transform .8s ease;
+}
 
+.touch-text {
+    display: block;
+}
+
+.touch-hand {
+    font-size: 27px;
+    color: rgba(255, 255, 255, .9);
+
+    animation: touchHandMove 1.5s ease-in-out infinite;
+}
+
+@keyframes touchHandMove {
+    0% {
+        transform: translate(-18px, 8px) rotate(-8deg);
+    }
+
+    25% {
+        transform: translate(0, -2px) rotate(0deg);
+    }
+
+    50% {
+        transform: translate(18px, 8px) rotate(8deg);
+    }
+
+    75% {
+        transform: translate(0, 18px) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(-18px, 8px) rotate(-8deg);
+    }
 }
 
 
@@ -377,65 +395,6 @@ section{
 
     font-weight: 400;
 }
-
-/* svg {
-
-    width: min(90%, 760px);
-
-    margin: 0;
-
-    padding: 0;
-
-    opacity: .7;
-
-    filter: drop-shadow(0 0 15px rgba(240, 232, 214, 0.5));
-
-    
-}
-            
-			g#bigWave {
-				transform: translatex(-1440px);
-				opacity: .5;
-				height:96px;
-				
-				fill: #D6B36A;
-				path#bluePath0 {
-					transform: translatex(-1440px);
-				}
-				path#bluePath1 {
-					transform: translatex(0px);
-				}
-				path#bluePath2 {
-					transform: translatex(1440px);
-				}
-				
-        }
-			
-
-		svg#border0 {
-			transform: translatey(2px);
-			
-			g {
-				animation: waves 8s linear infinite;
-			}
-		}
-		
-		svg#border1 {
-			transform: scaley(-1) translatey(2px);
-			
-			g{
-				animation: waves 4s linear infinite 1.5s;
-			}
-		}
-		@keyframes waves {
-	to{transform:translatex(1440px)}
-} */
-
-
-/* ===============================
-   هاله انتقال
-================================ */
-
 
 .transition-glow {
 
@@ -674,7 +633,7 @@ section{
     height:220px;
     max-width: 80vw;
     max-height:80vw;
-    margin: 30px auto;
+   margin: 5px auto 30px;
     background: rgba(255, 249, 240, 0.12);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(12px);
@@ -894,37 +853,76 @@ section{
 }
 
 
-.hint{
+.hint {
     position: absolute;
     inset: 0;
 
     z-index: 11;
 
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
-    pointer-events:none;
+    pointer-events: none;
 
-    color:rgba(90,70,55,0.7);
-}
-.hint.hide{
-    opacity:0;
-    transition:0.5s ease;
+    color: rgba(90, 70, 55, 0.7);
+
+    transition: opacity .5s ease;
 }
 
-.hand{
-    animation: handMove 1.5s infinite;
+.hint.hide {
+    opacity: 0;
 }
 
-@keyframes handMove{
-    0%,100%{
-        transform:translateX(-8px);
+.hand {
+    margin-top: 10px;
+
+    font-size: 28px;
+
+    animation:
+        handMove 1.5s ease-in-out infinite;
+
+    transition:
+        left .35s ease,
+        top .35s ease,
+        transform .35s ease;
+}
+.hint.hand-guide {
+    inset: auto;
+
+    position: absolute;
+
+    width: 70px;
+    height: 70px;
+
+    justify-content: center;
+
+    transition:
+        left .35s ease,
+        top .35s ease,
+        opacity .4s ease;
+}
+
+.hint.hand-guide span {
+    display: none;
+}
+
+.hint.hand-guide .hand {
+    margin: 0;
+}
+
+@keyframes handMove {
+
+    0%,
+    100% {
+        transform: translateX(-8px);
+        opacity: .55;
     }
 
-    50%{
-        transform:translateX(8px);
+    50% {
+        transform: translateX(8px);
+        opacity: 1;
     }
 }
 .timer-text
