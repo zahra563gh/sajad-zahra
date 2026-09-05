@@ -392,7 +392,7 @@ section{
 
 .p-names-text {
     font-size: 30px;
-
+  color:#6f6259;
     font-weight: 400;
 }
 
@@ -674,7 +674,6 @@ section{
 
 .reveal.show {
 
-
     opacity: 1;
 
 
@@ -715,6 +714,7 @@ section{
     transition-delay: 1.9s;
 
 }
+
 
 /* ===============================
    موبایل
@@ -937,4 +937,17 @@ section{
 .date-reveal.show-content .time-text-1{
     opacity:1;
     transform:translateY(0);
+}
+.location{
+    font-size: 45px;
+}
+.location-t{
+    font-weight:normal;
+}
+.end-text{
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+   ;
 }
