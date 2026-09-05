@@ -7,6 +7,15 @@ const textCtx = textCanvas.getContext("2d");
 
 const touchMessage = document.getElementById("touchMessage");
 const goldenLight = document.getElementById("goldenLight");
+// دست راهنما برای ورود
+let touchHand = touchMessage.querySelector(".touch-hand");
+
+if (!touchHand) {
+    touchHand = document.createElement("div");
+    touchHand.className = "touch-hand";
+    touchHand.innerHTML = `<i class="fa-regular fa-hand-pointer"></i>`;
+    touchMessage.appendChild(touchHand);
+}
 const scrollHint = document.getElementById("scrollHint");
 const weddingMusic = document.getElementById("weddingMusic");
 
@@ -53,7 +62,8 @@ let musicStarted = false;
 let unlocked = false;
 
 let completionStarted = false;
-
+let touchGuideTimer = null;
+let lastMoveTime = 0;
 let lastMouseX = null;
 
 let lastMouseY = null;
@@ -508,6 +518,23 @@ createBackgroundStars();
 createFormationStars();
 
 
+function hideTouchGuide() {
+    clearTimeout(touchGuideTimer);
+
+    touchMessage.style.opacity = "0";
+    touchMessage.style.transform = "translate(-50%, -50%) scale(0.9)";
+}
+
+function showTouchGuideAgain() {
+    if (unlocked || progressTarget >= 1) return;
+
+    clearTimeout(touchGuideTimer);
+
+    touchGuideTimer = setTimeout(() => {
+        touchMessage.style.opacity = "1";
+        touchMessage.style.transform = "translate(-50%, -50%) scale(1)";
+    }, 700);
+}
 // =====================================================
 // شروع تجربه
 // =====================================================
@@ -550,8 +577,7 @@ function startExperience() {
     // مخفی کردن پیام ورود
     // =================================================
 
-    touchMessage.style.opacity =
-        "0";
+   hideTouchGuide();
 
     touchMessage.style.transform =
         "translate(-50%, -50%) scale(0.95)";
@@ -645,7 +671,8 @@ window.addEventListener(
             startExperience();
 
         }
-
+        lastMoveTime = Date.now();
+         showTouchGuideAgain();
     }
 );
 
