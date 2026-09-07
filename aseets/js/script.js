@@ -1423,17 +1423,26 @@ function erase(x, y) {
     // بعد از کمی کشیدن، راهنما محو شود
     if (erasedAmount > 15 && !hintHidden) {
 
-        hintHidden = true;
+    hintHidden = true;
+    scratchCompleted = true;
 
-        setTimeout(() => {
+    setTimeout(() => {
 
-            hint.classList.add("hide");
+        hint.classList.add("hide");
 
-            document.querySelector(".date-reveal")
-                .classList.add("show-content");
+        document.querySelector(".date-reveal")
+            .classList.add("show-content");
 
-        }, 250);
-    }
+        // مه برای همیشه پاک بماند
+        scratchCtx.clearRect(
+            0,
+            0,
+            scratchCanvas.width,
+            scratchCanvas.height
+        );
+
+    }, 250);
+}
 }
 
 
