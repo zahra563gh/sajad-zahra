@@ -1543,3 +1543,209 @@ setInterval(function(){
 
 
 },1000);
+
+//**** */
+
+// =====================================================
+// اسکرول مرحله‌ای وب‌کارت
+// =====================================================
+
+let scrollStepBusy = false;
+let currentScrollStep = 0;
+let touchStartY = 0;
+
+
+// مراحل اسکرول
+function getScrollSteps() {
+
+    const elements = [
+
+        // باکس اول
+        document.querySelector(
+            ".invitation > .wave-box.invitation-content"
+        ),
+
+        // متن «تا شروع قصه ما»
+        document.querySelector(
+            ".invitation > div.reveal.delay-5"
+        ),
+
+        // تایمر
+        document.querySelector(
+            ".invitation > .wave-box.names"
+        ),
+
+        // تاریخ
+        document.querySelector(
+            ".invitation > .time-text-1"
+        ),
+
+        // مکان مراسم
+        document.querySelector(
+            ".invitation > .wave-box.invitation-content.delay-4"
+        ),
+
+        // متن پایانی
+        document.querySelector(
+            ".invitation > .end-text"
+        )
+
+    ];
+
+    return elements.filter(Boolean);
+}
+
+
+// رفتن به مرحله بعد یا قبل
+function moveToScrollStep(direction) {
+
+    if (!unlocked || scrollStepBusy) {
+        return;
+    }
+
+    const steps = getScrollSteps();
+
+    if (!steps.length) {
+        return;
+    }
+
+
+    currentScrollStep += direction;
+
+
+    // جلوگیری از خروج از محدوده
+    if (currentScrollStep < 0) {
+        currentScrollStep = 0;
+    }
+
+    if (currentScrollStep >= steps.length) {
+        currentScrollStep = steps.length - 1;
+    }
+
+
+    const target = steps[currentScrollStep];
+
+    if (!target) return;
+
+
+    scrollStepBusy = true;
+
+
+    target.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
+
+    // سرعت اسکرول
+    setTimeout(() => {
+
+        scrollStepBusy = false;
+
+    }, 450);
+}
+
+
+// =====================================================
+// اسکرول با موس
+// =====================================================
+
+window.addEventListener(
+    "wheel",
+    (event) => {
+
+        if (!unlocked) {
+            return;
+        }
+
+
+        // اگر اسکرول خیلی کوچک بود نادیده بگیر
+        if (Math.abs(event.deltaY) < 10) {
+            return;
+        }
+
+
+        event.preventDefault();
+
+
+        if (event.deltaY > 0) {
+
+            moveToScrollStep(1);
+
+        } else {
+
+            moveToScrollStep(-1);
+
+        }
+
+    },
+    {
+        passive: false
+    }
+);
+
+
+// =====================================================
+// لمس موبایل
+// =====================================================
+
+window.addEventListener(
+    "touchstart",
+    (event) => {
+
+        if (!unlocked) {
+            return;
+        }
+
+        touchStartY =
+            event.touches[0].clientY;
+
+    },
+    {
+        passive: true
+    }
+);
+
+
+window.addEventListener(
+    "touchend",
+    (event) => {
+
+        if (!unlocked) {
+            return;
+        }
+
+
+        const touchEndY =
+            event.changedTouches[0].clientY;
+
+
+        const distance =
+            touchStartY - touchEndY;
+
+
+        // حرکت خیلی کوچک را اسکرول حساب نکن
+        if (Math.abs(distance) < 40) {
+            return;
+        }
+
+
+        if (distance > 0) {
+
+            // کشیدن انگشت به بالا
+            // رفتن به مرحله بعد
+            moveToScrollStep(1);
+
+        } else {
+
+            // کشیدن انگشت به پایین
+            // برگشت به مرحله قبل
+            moveToScrollStep(-1);
+
+        }
+
+    },
+    {
+        passive: true
+    }
+);
