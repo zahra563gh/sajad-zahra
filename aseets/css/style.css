@@ -27,13 +27,12 @@ body {
     overflow-y: hidden;
 
 }
-html {
-    scroll-behavior: auto;
-    scroll-snap-type: none;
+html{
+    scroll-behavior:smooth;
+    scroll-snap-type:y proximity;
 }
-
-section {
-    scroll-snap-align: none;
+section{
+    scroll-snap-align:start;
 }
 
 /* ===============================
@@ -951,27 +950,4 @@ section {
     justify-content: center;
     text-align: center;
    ;
-}
-/* ===============================
-   اسکرول مرحله‌ای دعوت‌نامه
-================================ */
-
-.invitation > .wave-box,
-.invitation > .time-text-1,
-.invitation > .end-text,
-.invitation > div.reveal.delay-5 {
-    scroll-margin-top: 30px;
-}
-
-
-/* موبایل */
-@media (max-width: 600px) {
-
-    .invitation > .wave-box,
-    .invitation > .time-text-1,
-    .invitation > .end-text,
-    .invitation > div.reveal.delay-5 {
-        scroll-margin-top: 20px;
-    }
-
 }
