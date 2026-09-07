@@ -1348,42 +1348,58 @@ const scratchCanvas = document.getElementById("scratch");
 const scratchCtx = scratchCanvas.getContext("2d");
 
 const hint = document.querySelector(".hint");
-
 let drawing = false;
 let erasedAmount = 0;
 let scratchCompleted = false;
 let hintHidden = false;
 
+// ذخیره وضعیت فعلی مه
+let scratchState = null;
+
 function setCanvasSize(){
+
+    // اگر قبلاً چیزی از مه پاک شده، وضعیت قبلی را ذخیره کن
+    if (
+        scratchCanvas.width > 0 &&
+        scratchCanvas.height > 0
+    ) {
+        scratchState = scratchCtx.getImageData(
+            0,
+            0,
+            scratchCanvas.width,
+            scratchCanvas.height
+        );
+    }
 
     scratchCanvas.width = scratchCanvas.offsetWidth;
     scratchCanvas.height = scratchCanvas.offsetHeight;
 
-    // اگر مه قبلاً پاک شده، دوباره ساخته نشه
-    if (scratchCompleted) {
+    scratchCtx.globalCompositeOperation =
+        "source-over";
 
-        scratchCtx.clearRect(
+    // اگر وضعیت قبلی داریم، همان را برگردان
+    if (scratchState) {
+
+        scratchCtx.putImageData(
+            scratchState,
+            0,
+            0
+        );
+
+    } else {
+
+        // بار اول: مه کامل ساخته شود
+        scratchCtx.fillStyle =
+            "rgba(245,235,220,0.97)";
+
+        scratchCtx.fillRect(
             0,
             0,
             scratchCanvas.width,
             scratchCanvas.height
         );
 
-        return;
     }
-
-    scratchCtx.globalCompositeOperation =
-        "source-over";
-
-    scratchCtx.fillStyle =
-        "rgba(245,235,220,0.97)";
-
-    scratchCtx.fillRect(
-        0,
-        0,
-        scratchCanvas.width,
-        scratchCanvas.height
-    );
 }
 
 
@@ -1423,26 +1439,17 @@ function erase(x, y) {
     // بعد از کمی کشیدن، راهنما محو شود
     if (erasedAmount > 15 && !hintHidden) {
 
-    hintHidden = true;
-    scratchCompleted = true;
+        hintHidden = true;
 
-    setTimeout(() => {
+        setTimeout(() => {
 
-        hint.classList.add("hide");
+            hint.classList.add("hide");
 
-        document.querySelector(".date-reveal")
-            .classList.add("show-content");
+            document.querySelector(".date-reveal")
+                .classList.add("show-content");
 
-        // مه برای همیشه پاک بماند
-        scratchCtx.clearRect(
-            0,
-            0,
-            scratchCanvas.width,
-            scratchCanvas.height
-        );
-
-    }, 250);
-}
+        }, 250);
+    }
 }
 
 
