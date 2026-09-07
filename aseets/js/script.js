@@ -519,21 +519,38 @@ createFormationStars();
 
 
 function hideTouchGuide() {
+
     clearTimeout(touchGuideTimer);
 
     touchMessage.style.opacity = "0";
-    touchMessage.style.transform = "translate(-50%, -50%) scale(0.9)";
+
+    touchMessage.style.transform =
+        "translate(-50%, -50%) scale(0.9)";
 }
 
-function showTouchGuideAgain() {
-    if (unlocked || progressTarget >= 1) return;
+
+function showTouchGuideAgain(delay = 1200) {
+
+    // اگر اسم کامل شده، راهنما دیگر برنگردد
+    if (unlocked || progressTarget >= 1) {
+        return;
+    }
 
     clearTimeout(touchGuideTimer);
 
     touchGuideTimer = setTimeout(() => {
+
+        // دوباره بررسی می‌کنیم که در این مدت اسم کامل نشده باشد
+        if (unlocked || progressTarget >= 1) {
+            return;
+        }
+
         touchMessage.style.opacity = "1";
-        touchMessage.style.transform = "translate(-50%, -50%) scale(1)";
-    }, 700);
+
+        touchMessage.style.transform =
+            "translate(-50%, -50%) scale(1)";
+
+    }, delay);
 }
 // =====================================================
 // شروع تجربه
@@ -715,7 +732,16 @@ for (let i = 0; i < MOBILE_TOUCH_STEPS; i++) {
         passive: false
     }
 );
+window.addEventListener(
+    "touchend",
+    () => {
 
+        if (unlocked || progressTarget >= 1) return;
+
+        showTouchGuideAgain();
+
+    }
+);
 // =====================================================
 // رسم ستاره‌های پس‌زمینه
 // =====================================================
@@ -1453,6 +1479,7 @@ scratchCanvas.addEventListener("touchstart", (e) => {
 
 }, { passive: false });
 
+
 scratchCanvas.addEventListener("touchmove",(e)=>{
 
     e.preventDefault();
@@ -1472,9 +1499,9 @@ scratchCanvas.addEventListener("touchmove",(e)=>{
 const weddingDate = new Date(
     2026,
     8,
-    16,
-    16,
-    30,
+    12,
+    15,
+    0,
     0
 ).getTime();
 
