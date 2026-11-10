@@ -1498,7 +1498,7 @@ scratchCanvas.addEventListener("touchmove",(e)=>{
 
 const weddingDate = new Date(
     2026,
-    8,
+    11,
     12,
     15,
     0,
